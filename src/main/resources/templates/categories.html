@@ -1,0 +1,140 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>カテゴリ管理</title>
+    <link rel="stylesheet" th:href="@{/styles.css}" />
+  </head>
+  <body>
+    <div class="container">
+      <header class="page-header">
+        <h1>カテゴリ管理</h1>
+        <nav class="nav-links">
+          <a class="nav-button nav-primary" th:href="@{/inventory}">
+            <span class="nav-icon">↩️</span>
+            <span>在庫一覧へ戻る</span>
+          </a>
+          <a class="nav-button nav-success" th:href="@{/inventory/add}">
+            <span class="nav-icon">➕</span>
+            <span>食材を追加</span>
+          </a>
+        </nav>
+      </header>
+
+      <section class="card">
+        <form
+          class="form form-inline"
+          th:action="@{/categories/add}"
+          method="post"
+        >
+          <div>
+            <label for="categoryName">新しいカテゴリ</label>
+            <input
+              id="categoryName"
+              name="name"
+              type="text"
+              placeholder="例: 野菜"
+            />
+          </div>
+          <div>
+            <label for="categoryEmoji">絵文字</label>
+            <select id="categoryEmoji" name="emoji">
+              <option value="">未選択</option>
+              <option value="🥬">🥬 野菜</option>
+              <option value="🥕">🥕 根菜</option>
+              <option value="🧅">🧅 玉ねぎ・ねぎ類</option>
+              <option value="🍄">🍄 きのこ</option>
+              <option value="🥦">🥦 ブロッコリー</option>
+              <option value="🍅">🍅 トマト</option>
+              <option value="🥒">🥒 きゅうり</option>
+              <option value="🥔">🥔 いも類</option>
+              <option value="🌽">🌽 コーン</option>
+              <option value="🥬">🥬 葉物</option>
+              <option value="🥗">🥗 サラダ</option>
+              <option value="🥩">🥩 肉</option>
+              <option value="🍗">🍗 鶏肉</option>
+              <option value="🥓">🥓 ベーコン</option>
+              <option value="🍖">🍖 豚肉</option>
+              <option value="🥩">🥩 牛肉</option>
+              <option value="🧆">🧆 ひき肉</option>
+              <option value="🐟">🐟 魚</option>
+              <option value="🦐">🦐 えび</option>
+              <option value="🦑">🦑 いか</option>
+              <option value="🦀">🦀 かに</option>
+              <option value="🐚">🐚 貝類</option>
+              <option value="🥛">🥛 乳製品</option>
+              <option value="🧀">🧀 チーズ</option>
+              <option value="🥚">🥚 卵</option>
+              <option value="🍞">🍞 パン</option>
+              <option value="🥐">🥐 ベーカリー</option>
+              <option value="🥯">🥯 ベーグル</option>
+              <option value="🥖">🥖 バゲット</option>
+              <option value="🍚">🍚 米/穀物</option>
+              <option value="🍜">🍜 麺類</option>
+              <option value="🍝">🍝 パスタ</option>
+              <option value="🥟">🥟 餃子/点心</option>
+              <option value="🍙">🍙 おにぎり</option>
+              <option value="🍣">🍣 寿司</option>
+              <option value="🍛">🍛 カレー</option>
+              <option value="🥫">🥫 缶詰</option>
+              <option value="🫘">🫘 豆類</option>
+              <option value="🧈">🧈 バター</option>
+              <option value="🍳">🍳 調理済み</option>
+              <option value="🍱">🍱 お弁当</option>
+              <option value="🧂">🧂 調味料</option>
+              <option value="🫑">🫑 ピーマン・パプリカ</option>
+              <option value="🍋">🍋 柑橘</option>
+              <option value="🍎">🍎 果物</option>
+              <option value="🍇">🍇 ぶどう</option>
+              <option value="🍓">🍓 いちご</option>
+              <option value="🍌">🍌 バナナ</option>
+              <option value="🥑">🥑 アボカド</option>
+              <option value="🌶️">🌶️ 香辛料</option>
+              <option value="🧃">🧃 飲料</option>
+              <option value="🍺">🍺 お酒</option>
+              <option value="🍰">🍰 デザート</option>
+              <option value="🍪">🍪 お菓子</option>
+              <option value="🥜">🥜 ナッツ</option>
+              <option value="🍯">🍯 はちみつ</option>
+              <option value="🧊">🧊 冷凍</option>
+              <option value="🥤">🥤 飲み物</option>
+              <option value="🫙">🫙 保存食</option>
+              <option value="🍽️">🍽️ その他</option>
+            </select>
+          </div>
+          <div>
+            <button class="button" type="submit">追加</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="card" style="margin-top: 16px">
+        <div th:if="${#lists.isEmpty(categories)}">
+          カテゴリがまだありません。
+        </div>
+        <table class="table" th:if="${!#lists.isEmpty(categories)}">
+          <thead>
+            <tr>
+              <th>絵文字</th>
+              <th>カテゴリ名</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="category : ${categories}">
+              <td th:text="${category.emoji}">🥬</td>
+              <td th:text="${category.name}">カテゴリ</td>
+              <td>
+                <form
+                  th:action="@{/categories/delete/{id}(id=${category.id})}"
+                  method="post"
+                >
+                  <button class="button danger" type="submit">削除</button>
+                </form>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,127 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>冷蔵庫の在庫一覧</title>
+    <link rel="stylesheet" th:href="@{/styles.css}" />
+  </head>
+  <body>
+    <div id="loadingOverlay" class="loading-overlay" aria-hidden="true">
+      <div class="loading-card">
+        <div class="loading-spinner"></div>
+        <p>AIレシピを生成中です…</p>
+      </div>
+    </div>
+
+    <div class="container">
+      <header class="page-header">
+        <h1>在庫一覧</h1>
+        <nav class="nav-links">
+          <a
+            class="nav-button nav-primary"
+            th:href="@{/recipe}"
+            id="aiRecipeLink"
+          >
+            <span class="nav-icon">🧑‍🍳</span>
+            <span>AIレシピを生成</span>
+          </a>
+          <a class="nav-button nav-success" th:href="@{/inventory/add}">
+            <span class="nav-icon">➕</span>
+            <span>食材を追加</span>
+          </a>
+          <a class="nav-button nav-warning" th:href="@{/recipes}">
+            <span class="nav-icon">📁</span>
+            <span>保存済みレシピ</span>
+          </a>
+          <a class="nav-button nav-muted" th:href="@{/categories}">
+            <span class="nav-icon">🗂️</span>
+            <span>カテゴリ管理</span>
+          </a>
+        </nav>
+      </header>
+
+      <section class="card" style="margin-bottom: 16px">
+        <form class="form form-inline" th:action="@{/inventory}" method="get">
+          <div>
+            <label for="categoryFilter">カテゴリで絞り込み</label>
+            <select id="categoryFilter" name="category">
+              <option value="">すべて</option>
+              <option
+                th:each="cat : ${categories}"
+                th:value="${cat.name}"
+                th:selected="${cat.name == selectedCategory}"
+                th:text="${(cat.emoji != null ? cat.emoji + ' ' : '') + cat.name}"
+              >
+                カテゴリ
+              </option>
+            </select>
+          </div>
+          <div>
+            <button class="button" type="submit">絞り込み</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="card">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>カテゴリ</th>
+              <th>食材名</th>
+              <th>数量</th>
+              <th>賞味期限</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              th:each="item : ${ingredients}"
+              th:classappend="${item.expiringSoon} ? 'expiring' : ''"
+            >
+              <td>
+                <span th:text="${categoryEmojiMap[item.category]}">🥬</span>
+                <span th:text="${item.category}">カテゴリ</span>
+              </td>
+              <td th:text="${item.name}">食材名</td>
+              <td
+                th:text="${(item.quantity % 1 == 0) ? item.quantity.intValue() : item.quantity} + ${item.unit}"
+              >
+                N個
+              </td>
+              <td th:text="${item.expiryDate}">YYYY-MM-DD</td>
+              <td>
+                <div class="table-actions">
+                  <a
+                    class="button secondary"
+                    th:href="@{/inventory/edit/{id}(id=${item.id})}"
+                  >
+                    編集
+                  </a>
+                  <form
+                    th:action="@{/inventory/delete/{id}(id=${item.id})}"
+                    method="post"
+                  >
+                    <button class="button danger" type="submit">削除</button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </div>
+
+    <script>
+      (function () {
+        const link = document.getElementById("aiRecipeLink");
+        const overlay = document.getElementById("loadingOverlay");
+        if (!link || !overlay) {
+          return;
+        }
+        link.addEventListener("click", () => {
+          overlay.classList.add("is-visible");
+          overlay.setAttribute("aria-hidden", "false");
+        });
+      })();
+    </script>
+  </body>
+</html>

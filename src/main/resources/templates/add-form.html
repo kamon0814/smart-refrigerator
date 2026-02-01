@@ -1,0 +1,99 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title th:text="${formTitle}">食材追加</title>
+    <link rel="stylesheet" th:href="@{/styles.css}" />
+  </head>
+  <body>
+    <div class="container">
+      <header class="page-header">
+        <h1 th:text="${formTitle}">食材追加フォーム</h1>
+        <nav class="nav-links">
+          <a class="nav-button nav-primary" th:href="@{/inventory}">
+            <span class="nav-icon">↩️</span>
+            <span>在庫一覧へ戻る</span>
+          </a>
+        </nav>
+      </header>
+
+      <section class="card">
+        <form
+          class="form"
+          th:action="@{${formAction}}"
+          th:object="${ingredientEntity}"
+          method="post"
+        >
+          <input type="hidden" th:field="*{id}" />
+          <div>
+            <label for="name">食材名</label>
+            <input id="name" type="text" th:field="*{name}" />
+            <div
+              class="error"
+              th:if="${#fields.hasErrors('name')}"
+              th:errors="*{name}"
+            >
+              error
+            </div>
+          </div>
+
+          <div>
+            <label for="category">カテゴリ</label>
+            <select id="category" th:field="*{category}">
+              <option value="">未選択</option>
+              <option
+                th:each="cat : ${categories}"
+                th:value="${cat.name}"
+                th:text="${(cat.emoji != null ? cat.emoji + ' ' : '') + cat.name}"
+              >
+                カテゴリ
+              </option>
+            </select>
+            <div class="helper-link">
+              <a th:href="@{/categories}">カテゴリを管理する</a>
+            </div>
+          </div>
+
+          <div>
+            <label for="quantity">数量</label>
+            <input
+              id="quantity"
+              type="number"
+              step="0.1"
+              th:field="*{quantity}"
+            />
+            <div
+              class="error"
+              th:if="${#fields.hasErrors('quantity')}"
+              th:errors="*{quantity}"
+            >
+              error
+            </div>
+          </div>
+
+          <div>
+            <label for="unit">単位</label>
+            <input id="unit" type="text" th:field="*{unit}" />
+          </div>
+
+          <div>
+            <label for="expiryDate">賞味期限</label>
+            <input id="expiryDate" type="date" th:field="*{expiryDate}" />
+            <div
+              class="error"
+              th:if="${#fields.hasErrors('expiryDate')}"
+              th:errors="*{expiryDate}"
+            >
+              error
+            </div>
+          </div>
+
+          <div>
+            <button class="button" type="submit" th:text="${submitLabel}">
+              追加
+            </button>
+          </div>
+        </form>
+      </section>
+    </div>
+  </body>
+</html>

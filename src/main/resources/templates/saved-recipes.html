@@ -1,0 +1,134 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>保存済みレシピ</title>
+    <link rel="stylesheet" th:href="@{/styles.css}" />
+  </head>
+  <body>
+    <div class="container">
+      <header class="page-header">
+        <h1>保存済みレシピ</h1>
+        <nav class="nav-links">
+          <a class="nav-button nav-primary" th:href="@{/inventory}">
+            <span class="nav-icon">↩️</span>
+            <span>在庫一覧へ戻る</span>
+          </a>
+          <a class="nav-button nav-warning" th:href="@{/recipe}">
+            <span class="nav-icon">🧑‍🍳</span>
+            <span>AIレシピを生成</span>
+          </a>
+        </nav>
+      </header>
+
+      <section class="card">
+        <div class="recipe-list" th:if="${#lists.isEmpty(recipes)}">
+          まだ保存されたレシピがありません。
+        </div>
+        <div class="recipe-list" th:if="${!#lists.isEmpty(recipes)}">
+          <article class="recipe-item" th:each="recipe, iter : ${recipes}">
+            <details
+              class="recipe-card recipe-card--saved"
+              th:attr="data-recipe=${iter.index}"
+            >
+              <summary class="recipe-summary">
+                <div>
+                  <div class="recipe-title">タイトル</div>
+                  <div class="recipe-snippet">概要を生成中...</div>
+                </div>
+                <div class="recipe-summary-actions">
+                  <span class="recipe-meta">
+                    <span
+                      th:text="${#temporals.format(recipe.createdAt, 'yyyy/MM/dd HH:mm')}"
+                    >
+                      2026/02/01 12:00
+                    </span>
+                  </span>
+                  <form
+                    th:action="@{/recipes/delete/{id}(id=${recipe.id})}"
+                    method="post"
+                  >
+                    <button class="button danger" type="submit">削除</button>
+                  </form>
+                </div>
+              </summary>
+              <div class="recipe-detail markdown"></div>
+            </details>
+            <pre
+              class="recipe-source"
+              th:attr="data-recipe=${iter.index}"
+              th:text="${recipe.content}"
+            >
+レシピ内容
+            </pre>
+          </article>
+        </div>
+      </section>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+      (function () {
+        if (!window.marked) {
+          return;
+        }
+        const getTitleAndSummary = (markdown, fallbackTitle) => {
+          const tokens = marked.lexer(markdown || "");
+          let title = "";
+          let summary = "";
+          for (const token of tokens) {
+            if (!title && token.type === "heading") {
+              title = token.text;
+            }
+            if (!summary && token.type === "paragraph") {
+              summary = token.text;
+            }
+            if (title && summary) {
+              break;
+            }
+          }
+
+          if (!title) {
+            const lines = (markdown || "")
+              .split("\n")
+              .map((line) => line.trim())
+              .filter((line) => line.length > 0);
+            if (lines[0] === "料理名" && lines[1]) {
+              title = lines[1];
+            } else if (lines[0]) {
+              title = lines[0].replace(/^#+\s*/, "");
+            }
+          }
+
+          return {
+            title: title || fallbackTitle || "保存レシピ",
+            summary: summary || "詳細をクリックして確認できます。",
+          };
+        };
+
+        document.querySelectorAll(".recipe-source").forEach((source) => {
+          const key = source.dataset.recipe;
+          const card = document.querySelector(
+            `.recipe-card[data-recipe="${key}"]`,
+          );
+          if (!card) {
+            return;
+          }
+          const markdown = source.textContent || "";
+          const detail = card.querySelector(".recipe-detail");
+          const summaryText = card.querySelector(".recipe-snippet");
+          const titleText = card.querySelector(".recipe-title");
+          const parsed = getTitleAndSummary(markdown, titleText?.textContent);
+          if (titleText) {
+            titleText.textContent = parsed.title;
+          }
+          if (summaryText) {
+            summaryText.textContent = parsed.summary;
+          }
+          if (detail) {
+            detail.innerHTML = marked.parse(markdown);
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>

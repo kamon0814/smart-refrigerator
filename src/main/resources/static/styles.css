@@ -1,0 +1,508 @@
+:root {
+  --bg: #ecfdf3;
+  --card: #ffffff;
+  --text: #1f2937;
+  --muted: #4b5563;
+  --primary: #16a34a;
+  --primary-strong: #15803d;
+  --border: #d1f5df;
+  --shadow: 0 16px 32px rgba(15, 23, 42, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family:
+    "Noto Sans JP",
+    system-ui,
+    -apple-system,
+    sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.container {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 32px 20px 60px;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 16px 20px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.nav-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  border: 1px solid transparent;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+  color: #0f172a;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease;
+}
+
+.nav-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.12);
+}
+
+.nav-icon {
+  font-size: 18px;
+}
+
+.nav-primary {
+  background: #c7e9f7;
+  border-color: #a5d8f3;
+}
+
+.nav-success {
+  background: #b7f0cf;
+  border-color: #7cd7a6;
+}
+
+.nav-warning {
+  background: #ffd48a;
+  border-color: #f8b24a;
+}
+
+.nav-muted {
+  background: #e5e7eb;
+  border-color: #cbd5f5;
+}
+
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 50;
+}
+
+.loading-overlay.is-visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.loading-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px 32px;
+  box-shadow: var(--shadow);
+  display: grid;
+  gap: 12px;
+  justify-items: center;
+  font-weight: 600;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 4px solid #d1fae5;
+  border-top-color: var(--primary);
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: var(--shadow);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+
+.table th,
+.table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid #d1d5db;
+  text-align: left;
+  font-size: 14px;
+}
+
+.table th {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.table tr.expiring {
+  background: #fef2f2;
+}
+
+.table tr.expiring td {
+  font-weight: 600;
+  color: #b91c1c;
+}
+
+.form {
+  display: grid;
+  gap: 16px;
+}
+
+.form label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.form input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 14px;
+  background: #ffffff;
+}
+
+.form select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 14px;
+  background: #ffffff;
+}
+
+.helper-link {
+  margin-top: 6px;
+  font-size: 12px;
+}
+
+.helper-link a {
+  color: var(--primary-strong);
+  text-decoration: none;
+}
+
+.form-inline {
+  grid-template-columns: 1fr 1fr auto;
+  align-items: end;
+}
+
+.form .error {
+  color: #dc2626;
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-strong));
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 6px 12px rgba(22, 163, 74, 0.25);
+  min-height: 40px;
+  min-width: 92px;
+}
+
+.button.secondary {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #86efac;
+  box-shadow: none;
+}
+
+.button.danger {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+  box-shadow: none;
+}
+
+.table-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.table-actions form {
+  margin: 0;
+}
+
+.recipe-text {
+  margin: 0;
+  white-space: pre-wrap;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.recipe-source {
+  display: none;
+}
+
+.recipe-actions {
+  margin-top: 16px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.recipe-list {
+  display: grid;
+  gap: 16px;
+}
+
+.recipe-item {
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: #ffffff;
+}
+
+.recipe-meta {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.recipe-card {
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: #ffffff;
+  padding: 16px 18px 68px;
+  position: relative;
+}
+
+.recipe-card--saved {
+  padding-bottom: 18px;
+}
+
+.recipe-summary {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.recipe-summary::-webkit-details-marker {
+  display: none;
+}
+
+.recipe-summary-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.recipe-summary-actions form {
+  margin: 0;
+}
+
+.recipe-snippet {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.recipe-title {
+  font-weight: 700;
+  margin-bottom: 6px;
+  font-size: 18px;
+  color: #0f172a;
+}
+
+.recipe-detail {
+  margin-top: 14px;
+  border-top: 1px dashed #e5e7eb;
+  padding-top: 12px;
+}
+
+.recipe-source {
+  display: none;
+}
+
+.recipe-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 16px;
+  font-size: 20px;
+}
+
+.section-title::before {
+  content: "✨";
+}
+
+.recipe-badge {
+  background: #e0f2fe;
+  color: #0369a1;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.recipe-title-text {
+  font-weight: 700;
+  color: #111827;
+}
+
+.toggle-save {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+}
+
+.recipe-number {
+  font-weight: 700;
+}
+
+.button.saved {
+  background: #e5e7eb;
+  color: #6b7280;
+  box-shadow: none;
+}
+
+.markdown h1,
+.markdown h2,
+.markdown h3 {
+  margin: 16px 0 8px;
+  color: #111827;
+}
+
+.markdown h2 {
+  font-size: 16px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: #ecfdf5;
+  border: 1px solid #bbf7d0;
+}
+
+.markdown h3 {
+  font-size: 14px;
+  color: #065f46;
+}
+
+.markdown ul {
+  background: #f8fafc;
+  border: 1px dashed #e2e8f0;
+  border-radius: 10px;
+  padding: 10px 16px 10px 28px;
+}
+
+.markdown p {
+  margin: 10px 0;
+  line-height: 1.75;
+  text-align: left;
+  color: #111827;
+}
+
+.markdown ul,
+.markdown ol {
+  padding-left: 20px;
+  text-align: left;
+}
+
+.markdown li {
+  margin: 6px 0;
+}
+
+.markdown code {
+  background: #f3f4f6;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 50;
+}
+
+.loading-overlay.is-visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.loading-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px 32px;
+  box-shadow: var(--shadow);
+  display: grid;
+  gap: 12px;
+  justify-items: center;
+  font-weight: 600;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 4px solid #dcfce7;
+  border-top-color: var(--primary);
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
