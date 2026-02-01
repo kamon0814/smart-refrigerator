@@ -36,6 +36,12 @@ public class IngredientController {
     private final RecipeRepository recipeRepository;
     private final CategoryRepository categoryRepository;
 
+    // ルートアクセスは在庫一覧へ
+    @GetMapping("/")
+    public String redirectRoot() {
+        return "redirect:/inventory";
+    }
+
     // 食材一覧表示
     @GetMapping("/inventory")
     public String showInventory(Model model, @RequestParam(value = "category", required = false) String category) {
